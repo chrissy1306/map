@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>My first Three.js app</title>
+        <title>Map</title>
         <style>
             body { margin: 0; }
             canvas { width: 100%; height: 100% }
@@ -11,30 +11,17 @@
         <script src="./libs/chroma.min.js"></script>
         <script>
 
-
-            // make ground colour of green
-            // buildings cant touch each other
-            // buildings can't be taller than the max height
-            // make a road grid system
-            // move the camera angle up a bit
-            // move your perspective around
-            // mixture of building styles
-
             var scale = chroma.scale(['black','#111111','#222222','white','red']).domain([0,1],10);
 
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
-            //{ alpha: true } = transparent
-
-            var renderer = new THREE.WebGLRenderer({ alpha: true });
+            var renderer = new THREE.WebGLRenderer({ alpha: true }); //{ alpha: true } = transparent
             var white = 0xffffff;
             var grey = 0x333F47;
-            //0x000000
             renderer.setClearColor(white, 1.0);
             renderer.setSize( window.innerWidth, window.innerHeight );
             renderer.shadowMap.enabled = true;
-
 
             // position and point the camera to the center of the scene
             camera.position.x = 7;
@@ -85,11 +72,10 @@
                     building.scale.z = scale;
                     building.scale.y = scale * 4;
                     
-                    // position the buildings
-                    // building.position.x=(Math.random()/2 * rangeX)-rangeX/2;
-                    // building.position.z=(Math.random()/2 * rangeY)-rangeY/2;
-                    building.position.x=-30 + Math.round((Math.random()/2 * planeGeometry.width));
-                    building.position.z=-20 + Math.round((Math.random()/2 * planeGeometry.height));
+                    //position the buildings
+                    building.position.x=(Math.random()/2 * rangeX)-rangeX/2;
+                    building.position.z=(Math.random()/2 * rangeY)-rangeY/2;
+
                     // add to scene
                     scene.add(building);
                 }
