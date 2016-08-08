@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>3D *** Map</title>
+        <title>3D bounce Map</title>
         <style>
             body { margin: 0; }
             canvas { width: 100%; height: 100% }
@@ -12,7 +12,7 @@
  	<script src="./libs/three.js"></script>
 	<script src="./libs/chroma.min.js"></script>
         <script>    
-        	var switch_to_3d = true;
+        	var switch_to_3d = false;
         	
             var scale = chroma.scale(['black','#111111','#222222','white','red']).domain([0,1],10);
 
@@ -179,7 +179,8 @@
 
 	    function animate() {		
 	    	requestAnimationFrame(animate);
-	    	sphere.position.z = 2*(1.5+0.5*Math.cos(leiaRenderer.timer*3));
+	    	//sphere.position.z = 2*(1.5+0.5*Math.cos(leiaRenderer.timer*3));
+	    	sphere.position.z = 4*(1.5+1.0*Math.cos(leiaRenderer.timer*3));
 	    	if (switch_to_3d == true) {
             	leiaRenderer.render(scene, leiaHoloScreen) ;
 	    	} else {
