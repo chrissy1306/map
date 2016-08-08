@@ -1,16 +1,19 @@
 <html>
     <head>
-        <title>Map</title>
+        <title>3D *** Map</title>
         <style>
             body { margin: 0; }
             canvas { width: 100%; height: 100% }
         </style>
+        <script src="https://www.leiainc.com/examples/js/three.js"></script>
+        <script src="https://www.leiainc.com/build/LeiaCore.js"></script>
     </head>
     <body>
-        <script src="./libs/three.js"></script>
-        <script src="./libs/chroma.min.js"></script>
-        <script>
-
+ 	<script src="./libs/three.js"></script>
+	<script src="./libs/chroma.min.js"></script>
+        <script>    
+        	var switch_to_3d = true;
+        	
             var scale = chroma.scale(['black','#111111','#222222','white','red']).domain([0,1],10);
 
             var scene = new THREE.Scene();
@@ -19,6 +22,7 @@
             var renderer = new THREE.WebGLRenderer({ alpha: true }); //{ alpha: true } = transparent
             var white = 0xffffff;
             var grey = 0x333F47;
+            
             renderer.setClearColor(white, 1.0);
             renderer.setSize( window.innerWidth, window.innerHeight );
             renderer.shadowMap.enabled = true;
@@ -37,14 +41,29 @@
             
             var plane, planeGeometry;
 
-            document.body.appendChild( renderer.domElement );
+	    	var sphere;
 
-            var render = function () {
-                renderer.render(scene, camera);
-            };
+	    	//document.body.appendChild( renderer.domElement );
+            //var render = function () {
+            //    renderer.render(scene, camera);
+            //};
+            
+            // Essential Leia Objects
+            var leiaDisplayInfo, leiaHoloScreen, leiaRenderer, leiaKeys;
+         	// leia init
+ 			leiaDisplayinfo = new LeiaDisplayInfo('https://www.leiainc.com/config/displayPrototypeSmallDevKit.json') ;
+            leiaHoloScreen = new LeiaHoloScreen(leiaDisplayInfo) ;
+            leiaRenderer = new LeiaRenderer(leiaHoloScreen) ;
+            leiaKeys = new LeiaKeystrokeHandler(scene, leiaHoloScreen, leiaRenderer, true );
 
-            var createCity = function (buildingCount, rangeX, rangeY, scale) {
+            if (switch_to_3d == true) {
+            	document.body.appendChild(leiaRenderer.renderer.domElement);    
+            } else {
+            	document.body.appendChild( renderer.domElement );
+            }
+                     
 
+             var createCity = function (buildingCount, rangeX, rangeY, scale) {
                 // create the basic buildingblock
                 var buildingBlock = new THREE.BoxGeometry(1,1,1);
                 buildingBlock.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0.5, 0 ) );
@@ -148,9 +167,33 @@
                 scene.add(plane);
             }
 
-            ground();
-            createCity(40, 20, 10, 3);
-            render();
+            function add_sphere() {
+		//var sphereGeometry = new THREE.SphereGeometry(4, 32, 32);
+		var sphereGeometry = new THREE.SphereGeometry(2,16,16);
+		var whiteMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, shininess: 30 } );
+		sphere = new THREE.Mesh(sphereGeometry, whiteMaterial);
+		//sphere.position.set(-5,5,2.0);
+		sphere.position.set(-5,1,2.0);
+		scene.add(sphere);
+	    }
+
+	    function animate() {		
+	    	requestAnimationFrame(animate);
+	    	sphere.position.z = 2*(1.5+0.5*Math.cos(leiaRenderer.timer*3));
+	    	if (switch_to_3d == true) {
+            	leiaRenderer.render(scene, leiaHoloScreen) ;
+	    	} else {
+	    		renderer.render(scene, camera);
+	    	}
+        }
+
+	    ground();
+            //createCity(40, 20, 10, 3);
+            createCity(3, 20, 10, 3);
+	    add_sphere();
+            //render();
+            //leiaRenderer.render(scene, leiaHoloScreen) ;
+	    animate() ;
         </script>
     </body>
 </html>
