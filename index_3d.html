@@ -12,8 +12,9 @@
  	<script src="./libs/three.js"></script>
 	<script src="./libs/chroma.min.js"></script>
         <script>    
-        	var switch_to_3d = false;
-        	
+        	var switch_to_3d = true;
+    		var renderStart = new Date().getTime();
+    		
             var scale = chroma.scale(['black','#111111','#222222','white','red']).domain([0,1],10);
 
             var scene = new THREE.Scene();
@@ -80,9 +81,9 @@
                     // create a custom material for each building
                     var material = new THREE.MeshLambertMaterial();
                     material.color = new THREE.Color(white);
-                    material.map = new THREE.Texture(generateBuildingTextureStripes());
-                    material.map.anisotropy = renderer.getMaxAnisotropy();
-                    material.map.needsUpdate    = true;
+                    //material.map = new THREE.Texture(generateBuildingTextureStripes());
+                    //material.map.anisotropy = renderer.getMaxAnisotropy();
+                    //material.map.needsUpdate    = true;
                     // create the mesh
                     var building = new THREE.Mesh(buildingBlock, material);
                     var scale =((Math.random()/1.2)+0.5) * scale;
@@ -103,8 +104,8 @@
 
             var generateBuildingTextureDots = function() {
                 var canvas = document.createElement("canvas");
-                canvas.width = 256;
-                canvas.height = 512;
+                canvas.width = 1600; //256;
+                canvas.height = 2560 ; //512;
                 var ctx = canvas.getContext("2d");
                 ctx.imageSmoothingEnabled    = false;
                 ctx.mozImageSmoothingEnabled = false;
@@ -178,13 +179,17 @@
 	    }
 
 	    function animate() {		
+    		var elapsed = new Date().getTime()-renderStart;
 	    	requestAnimationFrame(animate);
-	    	//sphere.position.z = 2*(1.5+0.5*Math.cos(leiaRenderer.timer*3));
-	    	sphere.position.z = 4*(1.5+1.0*Math.cos(leiaRenderer.timer*3));
+	    	sphere.position.y = 2*(1.5+0.5*Math.cos(elapsed/1000.0));
 	    	if (switch_to_3d == true) {
+		    	//sphere.position.y = 2*(1.5+0.5*Math.cos(leiaRenderer.timer*3));
             	leiaRenderer.render(scene, leiaHoloScreen) ;
 	    	} else {
-	    		renderer.render(scene, camera);
+	    		//alert('Rendered in ' + elapsed + 'ms');  
+				//sphere.position.y = 2.0*(1.5+0.5*Math.cos(elapsed/1000.0));
+		    	//sphere.position.z = sphere.position.z + 0.01;
+		    	renderer.render(scene, camera);
 	    	}
         }
 
