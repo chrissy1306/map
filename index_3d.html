@@ -10,11 +10,8 @@
     </head>
     <body>
  	<script src="./libs/three.js"></script>
-	<script src="./libs/chroma.min.js"></script>
         <script>    
         	var switch_to_3d = false;
-        	
-            var scale = chroma.scale(['black','#111111','#222222','white','red']).domain([0,1],10);
 
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -101,31 +98,6 @@
 
             }
 
-            var generateBuildingTextureDots = function() {
-                var canvas = document.createElement("canvas");
-                canvas.width = 256;
-                canvas.height = 512;
-                var ctx = canvas.getContext("2d");
-                ctx.imageSmoothingEnabled    = false;
-                ctx.mozImageSmoothingEnabled = false;
-                ctx.fillStyle='#111111';
-                ctx.fillRect(0,0,512,512);
-                // fill in the windows
-                for (var x = 0 ; x < 256 ; x+=8) {
-                    for (var y = 0 ; y < 490 ; y+=8) {
-                        ctx.fillStyle=scale(Math.random()).hex();
-                        ctx.fillRect(x+1,y+1,6,6);
-                    }
-                }
-                for (var x = 0 ; x < 256 ; x+=8) {
-                    for (var y = 490 ; y < 512 ; y+=8) {
-                        ctx.fillStyle='#333333';
-                        ctx.fillRect(x+1,y+1,8,8);
-                    }
-                }
-                return canvas;
-            }
-
             var generateBuildingTextureStripes = function () {
                 // build a small canvas 32x64 and paint it in white
               var canvas  = document.createElement( 'canvas' );
@@ -158,7 +130,7 @@
               // return the just built canvas2
               return canvas2;
             }
-
+            
             var ground = function() {
                 planeGeometry = new THREE.PlaneGeometry(400, 400); //60,40,1,1
                 var planeMaterial = new THREE.MeshLambertMaterial({color: grey});
